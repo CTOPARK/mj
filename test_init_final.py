@@ -475,7 +475,7 @@ async def MakeSound(saveSTR, filename):
 			mp3file.write(data)
 	else:	
 		tts = gTTS(saveSTR, lang = 'ko')
-		tts.save(f"./{filename}.mp3")
+		tts.save(f"./{filename}.wav")
 
 #mp3 파일 재생함수	
 async def PlaySound(voiceclient, filename):
@@ -1228,6 +1228,7 @@ class mainCog(commands.Cog):
 	async def menu_(self, ctx):
 		if ctx.message.channel.id == basicSetting[7]:
 			command_list = ''
+			command_list += ','.join(command[2]) + '\n'     #!설정확인
 			command_list += ','.join(command[3]) + '\n'     #!채널확인
 			command_list += ','.join(command[4]) + ' [채널명]\n'     #!채널이동
 			command_list += ','.join(command[5]) + ' ※ 관리자만 실행 가능\n'     #!소환
@@ -1236,21 +1237,39 @@ class mainCog(commands.Cog):
 			command_list += ','.join(command[8]) + '\n'     #!명치
 			command_list += ','.join(command[9]) + '\n'     #!재시작
 			command_list += ','.join(command[10]) + '\n'     #!미예약
+			command_list += ','.join(command[11]) + ' [인원] [금액]\n'     #!분배
 			command_list += ','.join(command[12]) + ' [뽑을인원수] [아이디1] [아이디2]...\n'     #!사다리
 			command_list += ','.join(command[27]) + ' [아이디1] [아이디2]...(최대 12명)\n'     #!경주
+			command_list += ','.join(command[35]) + ' [판매금액] (거래소세금)\n'     #!수수료
+			command_list += ','.join(command[36]) + ' [거래소금액] [실거래금액] (거래소세금)\n'     #!페이백
+			command_list += ','.join(command[13]) + ' [아이디]\n'     #!정산
+			command_list += ','.join(command[14]) + ' 또는 ' + ','.join(command[14]) + ' 0000, 00:00\n'     #!보스일괄
+			command_list += ','.join(command[40]) + ' 또는 ' + ','.join(command[40]) + ' 0000, 00:00\n'     #!멍일괄
 			command_list += ','.join(command[15]) + '\n'     #!q
 			command_list += ','.join(command[16]) + ' [할말]\n'     #!v
 			command_list += ','.join(command[17]) + '\n'     #!리젠
 			command_list += ','.join(command[18]) + '\n'     #!현재시간
+			command_list += ','.join(command[24]) + '\n'     #!킬초기화
+			command_list += ','.join(command[25]) + '\n'     #!킬횟수 확인
+			command_list += ','.join(command[25]) + ' [아이디]\n'     #!킬
+			command_list += ','.join(command[26]) + ' [아이디]\n'     #!킬삭제
+			command_list += ','.join(command[33]) + ' [아이디] 또는 ' + ','.join(command[33]) + ' [아이디] [횟수]\n'     #!킬차감
+			command_list += ','.join(command[29]) + '\n'     #!아이템 목록 초기화
+			command_list += ','.join(command[30]) + '\n'     #!아이템 목록 확인
+			command_list += ','.join(command[30]) + ' [아이템] 또는 ' + ','.join(command[30]) + ' [아이템] [개수]\n'     #!아이템 목록 입력
+			command_list += ','.join(command[31]) + ' [아이템]\n'     #!아이템 목록에서 삭제
+			command_list += ','.join(command[32]) + ' [아이템] 또는 ' + ','.join(command[32]) + ' [아이템] [개수]\n'     #!아이템 차감
 			command_list += ','.join(command[19]) + '\n'     #!공지
 			command_list += ','.join(command[19]) + ' [공지내용]\n'     #!공지
 			command_list += ','.join(command[20]) + '\n'     #!공지삭제
 			command_list += ','.join(command[21]) + ' [할말]\n'     #!상태
+			command_list += ','.join(command[28]) + ' 사다리, 정산, 척살, 경주, 아이템\n'     #!채널설정
 			command_list += ','.join(command[34]) + ' ※ 관리자만 실행 가능\n\n'     #서버나가기
 			command_list += ','.join(command[22]) + '\n'     #보스탐
 			command_list += ','.join(command[23]) + '\n'     #!보스탐
 			command_list += '[보스명]컷 또는 [보스명]컷 0000, 00:00\n'  
-			command_list += '[보스명] 컷 또는 [보스명] 컷 0000, 00:00\n'      
+			command_list += '[보스명] 컷 또는 [보스명] 컷 0000, 00:00\n'   
+			command_list += '[보스명]멍 또는 [보스명]멍 0000, 00:00\n'     
 			command_list += '[보스명]예상 또는 [보스명]예상 0000, 00:00\n' 
 			command_list += '[보스명]삭제\n'     
 			command_list += '[보스명]메모 [할말]\n'
@@ -1261,7 +1280,7 @@ class mainCog(commands.Cog):
 					)
 			embed.add_field(
 					name="----- 추가기능 -----",
-					value= '```- [보스명]컷/예상  [할말] : 보스시간 입력 후 빈칸 두번!! 메모 가능\n- [보스명]컷 명령어는 초성으로 입력가능합니다.\n  ex)' + bossData[0][0] + '컷 => ' + convertToInitialLetters(bossData[0][0] +'컷') + ', ' + bossData[0][0] + ' 컷 => ' + convertToInitialLetters(bossData[0][0] +' 컷') + '```'
+					value= '```- [보스명]컷/멍/예상  [할말] : 보스시간 입력 후 빈칸 두번!! 메모 가능\n- [보스명]컷 명령어는 초성으로 입력가능합니다.\n  ex)' + bossData[0][0] + '컷 => ' + convertToInitialLetters(bossData[0][0] +'컷') + ', ' + bossData[0][0] + ' 컷 => ' + convertToInitialLetters(bossData[0][0] +' 컷') + '```'
 					)
 			await ctx.send( embed=embed, tts=False)
 		else:
@@ -2041,10 +2060,17 @@ class mainCog(commands.Cog):
 			sayMessage = msg
 			try:
 				await MakeSound(ctx.message.author.display_name +'님이, ' + sayMessage, './sound/say')
-				await ctx.send("```< " + ctx.author.display_name + " >님이 \"" + sayMessage + "\"```", tts=False)
-				await PlaySound(ctx.voice_client, './sound/say.mp3')
 			except:
-				await ctx.send( f"```음성 접속에 문제가 있거나 음성채널에 되지 않은 상태입니다.!```")
+				await ctx.send( f"```음성파일 생성에 실패하였습니다.!(amazon polly 사용시 키 값을 확인하세요!)```")
+				return
+			await ctx.send("```< " + ctx.author.display_name + " >님이 \"" + sayMessage + "\"```", tts=False)
+			try:
+				if aws_key != "" and aws_secret_key != "":
+					await PlaySound(ctx.voice_client, './sound/say.mp3')
+				else:
+					await PlaySound(ctx.voice_client, './sound/say.wav')
+			except:
+				await ctx.send( f"```음성파일 재생에 실패하였습니다. 접속에 문제가 있거나 음성채널에 접속 되지 않은 상태입니다.!```")
 				return
 		else:  
 			return
@@ -2154,10 +2180,22 @@ class mainCog(commands.Cog):
 					aa.append(bossData[i][0])		                     #output_bossData[0] : 보스명
 					if bossMungFlag[i] == True :
 						aa.append(tmp_bossTime[i])                       #output_bossData[1] : 시간
+
+						# if (datetime.datetime.now() + datetime.timedelta(hours=int(basicSetting[0]))).strftime('%Y-%m-%d') == tmp_bossTime[i].strftime('%Y-%m-%d'):
+						# 	aa.append(tmp_bossTime[i].strftime('%H:%M:%S'))
+						# else:
+						# 	aa.append(f"[{tmp_bossTime[i].strftime('%Y-%m-%d')}] {tmp_bossTime[i].strftime('%H:%M:%S')}")
+
 						aa.append(tmp_bossTime[i].strftime('%H:%M:%S'))  #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(tmp_bossTime[i].strftime('%H:%M'))  
 						aa.append('-')	                                 #output_bossData[3] : -
 					else :
 						aa.append(bossTime[i])                           #output_bossData[1] : 시간
+
+						# if (datetime.datetime.now() + datetime.timedelta(hours=int(basicSetting[0]))).strftime('%Y-%m-%d') == bossTime[i].strftime('%Y-%m-%d'):
+						# 	aa.append(bossTime[i].strftime('%H:%M:%S'))
+						# else:
+						# 	aa.append(f"[{bossTime[i].strftime('%Y-%m-%d')}] {bossTime[i].strftime('%H:%M:%S')}")
+
 						aa.append(bossTime[i].strftime('%H:%M:%S'))      #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(bossTime[i].strftime('%H:%M'))  
 						aa.append('+')	                                 #output_bossData[3] : +
 					aa.append(bossData[i][2])                            #output_bossData[4] : 멍/미입력 보스
@@ -2315,11 +2353,23 @@ class mainCog(commands.Cog):
 					aa.append(bossData[i][0])		                     #output_bossData[0] : 보스명
 					if bossMungFlag[i] == True :
 						aa.append(tmp_bossTime[i])                       #output_bossData[1] : 시간
-						aa.append(tmp_bossTime[i].strftime('%H:%M:%S'))  #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(tmp_bossTime[i].strftime('%H:%M'))
+
+						if (datetime.datetime.now() + datetime.timedelta(hours=int(basicSetting[0]))).strftime('%Y-%m-%d') == tmp_bossTime[i].strftime('%Y-%m-%d'):
+							aa.append(tmp_bossTime[i].strftime('%H:%M:%S'))
+						else:
+							aa.append(f"[{tmp_bossTime[i].strftime('%Y-%m-%d')}] {tmp_bossTime[i].strftime('%H:%M:%S')}")
+
+						# aa.append(tmp_bossTime[i].strftime('%H:%M:%S'))  #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(tmp_bossTime[i].strftime('%H:%M'))
 						aa.append('-')	                                 #output_bossData[3] : -
 					else :
 						aa.append(bossTime[i])                           #output_bossData[1] : 시간
-						aa.append(bossTime[i].strftime('%H:%M:%S'))      #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(bossTime[i].strftime('%H:%M'))
+
+						if (datetime.datetime.now() + datetime.timedelta(hours=int(basicSetting[0]))).strftime('%Y-%m-%d') == bossTime[i].strftime('%Y-%m-%d'):
+							aa.append(bossTime[i].strftime('%H:%M:%S'))
+						else:
+							aa.append(f"[{bossTime[i].strftime('%Y-%m-%d')}] {bossTime[i].strftime('%H:%M:%S')}")
+							
+						# aa.append(bossTime[i].strftime('%H:%M:%S'))      #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(bossTime[i].strftime('%H:%M'))
 						aa.append('+')	                                 #output_bossData[3] : +
 					aa.append(bossData[i][2])                            #output_bossData[4] : 멍/미입력 보스
 					aa.append(bossMungCnt[i])	                         #output_bossData[5] : 멍/미입력횟수
